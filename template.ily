@@ -10,25 +10,27 @@
 \paper {
     paper-width = 21.0\cm
     paper-height = 29.7\cm
-    top-margin = 1\cm
-    bottom-margin = 1.5\cm
+    top-margin = 0.4\cm
+    bottom-margin = 0.8\cm
     left-margin = 1.2\cm
     right-margin = 1.1\cm
-    between-system-space = 1.5\cm
-    indent = 1.5\cm
+    between-system-space = 0.5\cm
+    indent = 0\cm
 }
 
 \layout {
-  % Set indentation of first line
-  indent = 0.0
 
   % Adjust rehearsal mark position
-  \override Score.RehearsalMark.break-align-symbols = #'('staff-bar)
-  \override Score.Clef.break-align-anchor-alignment = #0
+  \override Score.RehearsalMark.self-alignment-X = #0.8
+  %\override Score.RehearsalMark.padding = #0.1
+  %\override Score.RehearsalMark.Y-offset = #-3
 
   % Set chord symbol font
   \override ChordName.font-name = "Academico"
   \override ChordName.font-size = #2.5
+
+  % Set lyrics font size
+  \override LyricText.font-size = #-1
 
   \context { \Score
 
@@ -42,6 +44,9 @@
     % Hide clef and key signature on subsequent staves
     \override Clef.break-visibility = #'#(#f #f #f)
     \override KeySignature.break-visibility = #'#(#f #f #f)
+
+    % Increase distance between chords and staff
+    \override VerticalAxisGroup.nonstaff-relatedstaff-spacing.padding = #5
   }
 
 }
