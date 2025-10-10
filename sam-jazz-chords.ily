@@ -1,0 +1,170 @@
+\version "2.19.12"
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Creating jazz-style chords
+% Borrowed from Jean-Pierre's good work at:
+%               https://sites.google.com/site/jpgzic/home
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% modification of the procedure "chordRootNamer"
+%---- Definition of chord alterations -------
+#(define (JazzChordNames pitch majmin)	;majmin is a required argument for "chordNamer", but not used here
+  (let* ((alt (ly:pitch-alteration pitch)))
+    (make-line-markup
+      (list
+	(make-simple-markup
+	  (vector-ref #("C" "D" "E" "F" "G" "A" "B")
+	    (ly:pitch-notename pitch)))
+	(if
+    (= alt 0)
+	  (markup "")
+    ; Make the alteration relatively big, between super and normal-size-super
+    (markup #:scale (cons 0.8 0.8) #:normal-size-super
+      (if (= alt FLAT) "♭" "♯")
+      #:hspace -1
+    )
+  )
+  ))))
+
+#(define-markup-command (csub layout props arg) (string?)
+  (interpret-markup layout props
+    (markup #:raise 0.5 (markup #:sub arg))))
+
+%----- markup commands to make it easier to write chords -----
+
+#(define-markup-command (acHalf layout props extension) (string?)
+  (interpret-markup layout props
+    (markup #:csub "ø" #:csub extension)))
+
+#(define-markup-command (acDim layout props extension) (string?)
+  (interpret-markup layout props
+    (markup #:csub "o" #:csub extension)))
+
+#(define-markup-command (acMin layout props extension) (string?)
+  (interpret-markup layout props
+    (markup #:csub "m" #:csub extension)))
+
+#(define-markup-command (acMaj layout props extension) (string?)
+  (interpret-markup layout props
+    (markup #:csub "Δ" #:csub extension)))
+
+#(define-markup-command (acMinMaj layout props extension) (string?)
+  (interpret-markup layout props
+    (markup #:csub "m" #:csub "Δ" #:csub extension)))
+
+#(define-markup-command (acAug layout props extension) (string?)
+  (interpret-markup layout props
+    (markup #:csub "+" #:csub extension)))
+
+%{
+% for chords with up to three alterations, stacked on top of each other
+#(define-markup-command (acAlt layout props strA strB strC) (string? string? string?)
+  (interpret-markup layout props
+    (markup
+      #:csub strA
+      #:fontsize 1.5 "["
+      #:fontsize -4
+      #:raise -1.2
+      #:column (strB strC)
+      #:fontsize 1.5 "]"
+    )
+  )
+)
+%}
+
+
+JazzChordsList = {
+% 3 notes
+  <c es ges>-\markup { \acDim #"" } % :dim
+  <c es g>-\markup { \acMin #"" } % :m
+  <c e ges>-\markup { \csub #"♭5" } % :5-
+  <c e gis>-\markup { \acAug #"" } % :aug
+  <c es gis>-\markup { \acMin #"♭5" } % :m5+ (Ab/C)
+
+% minor third chords - 4 notes
+  <c es ges beses>-\markup { \acDim #"7" } % :dim7
+  <c es g a>-\markup { \acMin #"6" } % :m6
+  <c es ges bes>-\markup { \acHalf #"7" } % :m7.5-
+  <c es g bes>-\markup { \acMin #"7" } % :m7
+  <c es gis bes>-\markup { \acMin #"7♯5" } % :m7.5+
+  <c es g b>-\markup { \acMinMaj #"7" } % :m7+
+  <c es g d'>-\markup { \acMin #"add9" } % :m5.9
+
+% major 7 chords
+  <c e g b>-\markup { \acMaj #"7" } % :maj7
+  <c e g b fis'>-\markup { \acMaj #"7♯11" } % :maj7.11+
+  <c e g b d'>-\markup { \acMaj #"9" } % :maj9
+  <c e g b d' fis'>-\markup { \acMaj #"9♯11" } % :maj9.11+
+  <c e g b d' a'>-\markup { \acMaj #"13" } % :maj13
+  <c e g b d' fis' a'>-\markup { \acMaj #"13♯11" } % :maj13.11+
+  <c e g b d' f'>-\markup { \acMaj #"11" } % :maj11
+
+% #5/b5 major chords
+  <c e ges b>-\markup { \acMaj #"7♭5" } % :maj.5-
+  <c e gis b>-\markup { \acMaj #"7♯5" } % :maj.5+
+
+% minor third chords - 5+ notes
+  <c es g a d'>-\markup { \acMin #"6/9" } % :m6.9
+  <c es g bes d'>-\markup { \acMin #"9" } % :m9
+  <c es ges bes d'>-\markup { \acHalf #"9" } % :m9.5-
+  <c es g b d'>-\markup { \acMinMaj #"9" } % :m9.7+
+  <c es g bes f'>-\markup { \acMin #"11" } % :m7.11
+  <c es g bes a'>-\markup { \acMin #"13" } % :m7.13
+  <c es g bes d' f'>-\markup { \acMin #"11" } % :m11
+  <c es ges bes f'>-\markup { \acHalf #"11" } % :m7.11.5-
+  <c es g bes d' f' a'>-\markup { \acMin #"13" } % :m13
+
+% major third chords - 5 notes
+  <c e g d'>-\markup { \csub #"(9)" } % :5.9
+  <c e g a d'>-\markup { \csub #"6/9" }	% :6.9
+
+% dominant chords
+  <c e g bes>-\markup { \csub #"7" } % :7
+  <c e g bes d'>-\markup { \csub #"9" } % :9
+  <c e g bes d' a'>-\markup { \csub #"13" } % :9.13
+  <c e g bes d' aes'>-\markup { \csub #"9♭13" } % :9.13-
+
+% altered dominant chords
+  <c e ges bes>-\markup { \csub #"7♭5" } % :7.5-
+  <c e gis bes>-\markup { \csub #"7♯5" } % :7.5+
+  <c e g bes des'>-\markup { \csub #"7♭9" } % :9-
+  <c e g bes d' fis'>-\markup { \csub #"9♯11" } % :9.11+
+  <c e g bes dis'>-\markup { \csub #"7♯9" } % :9+
+  <c e g bes fis'>-\markup { \csub #"7♯11" } % :7.11+
+  <c e g bes aes'>-\markup { \csub #"7♭13" } % :7.13-
+  <c e g bes d' a' >-\markup { \csub #"13" } % :13
+  <c e g bes des' a' >-\markup { \csub #"13♭9" } % :13.9-
+  <c e g bes des' aes' >-\markup { \csub #"7♭9♭13" } % :8.9-.13-
+  <c e g bes d' a' fis'>-\markup { \csub #"13♯11" } % :13.11+
+
+  % hack for b9#9
+  <c e g bes cis' dis'>-\markup { \csub #"7♭9♯9" } % :7.8+.9+
+  <c e g bes cis' dis' a'>-\markup { \csub #"13♭9♯9" } % :13.8+.9+
+  <c e g bes cis' dis' aes'>-\markup { \csub #"♭9♯9♭13" } % :13-.8+.9+
+
+% suspended chords
+  <c d g>-\markup { \csub #"sus2" } % :sus2
+  <c f g>-\markup { \csub #"sus4" } % :sus4
+  <c f g bes>-\markup { \csub #"7sus4" } % :sus4.7
+  <c f g bes d'>-\markup { \csub #"9sus" } % :sus4.7.9
+  <c f g a>-\markup { \csub #"6sus" } % :sus4.6
+  <c f g bes a'>-\markup { \csub #"13sus" } % :sus4.7.13
+  <c f g a'>-\markup { \csub #"13sus" } % :sus13
+  <c f g bes des'>-\markup { \csub #"7sus4♯9" } % :sus4.7.9-
+  <c f g bes des' a'>-\markup { \csub #"13sus♯9" } % :sus4.7.13.9-
+}
+
+% variable needed to use chord exceptions
+JazzChords = #(append (sequential-music-to-chord-exceptions JazzChordsList #t) ignatzekExceptions)
+
+% modify the default ChordNames context
+\layout {
+  \context {
+    \ChordNames
+    chordRootNamer = #JazzChordNames	% update the chord names
+    chordNameExceptions = #JazzChords	% update the chord exceptions
+    %\override ChordName.font-name = #"lilyjazz-chord"  % use the custom font for displaying the chords
+  }
+}
+
