@@ -15,17 +15,27 @@
       (list
 	(make-simple-markup
 	  (vector-ref #("C" "D" "E" "F" "G" "A" "B")
-	    (ly:pitch-notename pitch)))
-	(if
-    (= alt 0)
-	  (markup "")
-    ; Make the alteration relatively big, between super and normal-size-super
-    (markup #:scale (cons 0.8 0.8) #:normal-size-super
-      (if (= alt FLAT) "♭" "♯")
-      #:hspace -1
+	    (ly:pitch-notename pitch))
+  )
+	(markup
+    (if
+      (= alt 0)
+	    (markup "")
+      ; Make the alteration relatively big, between super and normal-size-super
+      (markup #:scale (cons 0.8 0.8) #:normal-size-super
+        (if (= alt FLAT) "♭" "♯")
+        ; Make the alteration width 0 because it's a superscript,
+        ; which means it doesn't overlap with the subscript.
+        #:hspace -1
+      )
+    )
+    ; Manual kerning adjustments...
+    (if (= (ly:pitch-notename pitch) 3) (markup #:hspace -0.5) ; F
+      (if (= (ly:pitch-notename pitch) 1) (markup #:hspace -0.15) ; D
+        (markup #:hspace -0.05))
     )
   )
-  ))))
+))))
 
 #(define-markup-command (csub layout props arg) (string?)
   (interpret-markup layout props

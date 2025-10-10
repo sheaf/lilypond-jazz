@@ -79,55 +79,56 @@ Melody = \relative bes' {
 %\tempo 4=60
 
 \autoPageBreaksOff
+\set strictBeatBeaming = ##t
 
-\mark \markup {  \bold \rounded-box { "Intro" } }
+\mark \markup { \bold \rounded-box { "Intro" } }
 r8 bes8 a8 bes8 a4 f4 |
 a4 a2. |
 r8 g8 a8 bes8 c4 a4 |
 g1 | \break
 
-r8 bes8 bes8 bes8 d8 d8 d4 |
+r8 bes8 bes8 bes8 d4 d8 d8 |
 \times 2/3 { d4 d4 a4 } g2 |
 r8 c8 c8 c8 c4. d8 |
 c2. f,4 \bar "||" \break |
 
 \mark \markup { \bold \rounded-box { "A1" } }
 f2 ~ f8 bes,8 d8 f8 |
-g8 a8 g4 ~ g4 g4 |
+g8 a8 g2 g4 |
 g2 ~ g8 c,8 es8 g8 |
 a2. a4 \break |
 
 a2 ~ a8 d,8 f8 a8 |
-bes8 c8 bes4 ~bes4 bes4 |
+bes8 c8 bes2 bes4 |
 bes2 ~ bes8 es,8 g8 bes8 |
 c2. bes8 c8 \bar "||" \break |
 
 \mark \markup { \bold \rounded-box { "B" } }
 d4. d8 d4 c8 bes8 |
-d4 d4 ~ d8 d8 c8 bes8 |
+d4 d4. d8 c8 bes8 |
 c4 c8 c8 c8 d8 c8 bes8 |
 c2. bes8 a8 \break |
 
 bes8 bes8 ~ bes8 bes8 bes8 c8 a8 g8 |
-bes4 bes4 ~ bes4 g8 gis8 |
+bes4 bes2 g8 gis8 |
 a4 a8 a8 a8 a8 g8 f8 |
 a2. g4 \bar "||" \break |
 
 \mark \markup { \bold \rounded-box { "A2" } }
 f2 ~ f8 bes,8 d8 f8 |
-g8 a8 g4 ~ g4 g4 |
+g8 a8 g2 g4 |
 g2 ~ g8 c,8 es8 g8 |
 a2. a4 \break |
 
 a2 ~ a8 d,8 f8 a8 |
-bes8 c8 bes4 ~ bes4 bes4 |
+bes8 c8 bes2 bes4 |
 bes2 ~ bes8 es,8 g8 bes8 |
 d2. c4 \bar "||" \break |
 
 \mark \markup { \rounded-box { \bold "C" } }
-bes4 bes8 bes8 bes8 a8 g8 a8 |
-bes4 bes4 ~ bes4 bes8 c8 |
-r4 d8 d8 d8 d8 c8 bes8 |
+bes8 bes8 ~ bes8 bes8 bes8 a8 g8 a8 |
+bes4 bes2 bes8 c8 |
+d4. d8 d8 d8 c8 bes8 |
 d,2. g4 \break |
 
 bes2 ~ bes8 es,8 g8 bes8 |
@@ -156,7 +157,7 @@ c1 \bar "|."
   \new Lyrics
     \with {
       % Move lyrics a bit closer to staff
-      \override VerticalAxisGroup.nonstaff-relatedstaff-spacing.padding = #0.6
+      \override VerticalAxisGroup.nonstaff-relatedstaff-spacing.padding = #0.8
      }
     \lyricsto "Melody" { \Lyrics }
 >>

@@ -27,10 +27,10 @@
 
   % Set chord symbol font
   \override ChordName.font-name = "Academico"
-  \override ChordName.font-size = #2.5
+  \override ChordName.font-size = #2.2
 
   % Set lyrics font size
-  \override LyricText.font-size = #-1
+  \override LyricText.font-size = #-0.8
 
   \context { \Score
 
@@ -44,9 +44,6 @@
     % Hide clef and key signature on subsequent staves
     \override Clef.break-visibility = #'#(#f #f #f)
     \override KeySignature.break-visibility = #'#(#f #f #f)
-
-    % Increase distance between chords and staff
-    \override VerticalAxisGroup.nonstaff-relatedstaff-spacing.padding = #5
   }
 
 }
