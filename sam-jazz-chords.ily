@@ -1,4 +1,4 @@
-\version "2.19.12"
+\version "2.24.4"
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Creating jazz-style chords
@@ -10,36 +10,47 @@
 % modification of the procedure "chordRootNamer"
 %---- Definition of chord alterations -------
 #(define (JazzChordNames pitch majmin)	;majmin is a required argument for "chordNamer", but not used here
-  (let* ((alt (ly:pitch-alteration pitch)))
-    (make-line-markup
+  (let* ((alt (ly:pitch-alteration pitch)))(
+   let* ((alt-ix (+ 2 (* 2 alt))))(
+   let* ((alt-scale (vector-ref #(0.9 0.8 0 0.8 1.3) alt-ix)))(
+   let* ((alt-raise (vector-ref #(0.8 0.8 0.8 0.8 -1.2) alt-ix)))(
+   let* ((pitch-ix (ly:pitch-notename pitch)))(
+    make-line-markup
       (list
 	(make-simple-markup
-	  (vector-ref #("C" "D" "E" "F" "G" "A" "B")
-	    (ly:pitch-notename pitch))
+	  (vector-ref #("C" "D" "E" "F" "G" "A" "B") pitch-ix)
   )
 	(markup
     (if
       (= alt 0)
 	    (markup "")
       ; Make the alteration relatively big, between super and normal-size-super
-      (markup #:scale (cons 0.8 0.8) #:normal-size-super
-        (if (= alt FLAT) "♭" "♯")
+      (markup
+        ; Move the alteration closer to some letters (A, D)
+        #:hspace (vector-ref #(0 -0.1 0 0 0 -0.3 0) pitch-ix)
+        #:hspace (vector-ref #(-0.3 -0.2 0 -0.2 -0.1) alt-ix)
+        #:scale (cons alt-scale alt-scale)
+        #:raise alt-raise
+        #:normal-size-super
+        (make-simple-markup
+        	(vector-ref #("𝄫" "♭" "" "♯" "𝄪") alt-ix)
+        )
         ; Make the alteration width 0 because it's a superscript,
         ; which means it doesn't overlap with the subscript.
-        #:hspace -1
+        #:hspace (vector-ref #(-1.7 -0.8 0 -0.8 -1.2) alt-ix)
+
+        ; Re-adjust for per-letter alteration adjustement
+        #:hspace (vector-ref #(0 0.1 0 0 0 0.3 0) pitch-ix)
       )
     )
-    ; Manual kerning adjustments...
-    (if (= (ly:pitch-notename pitch) 3) (markup #:hspace -0.5) ; F
-      (if (= (ly:pitch-notename pitch) 1) (markup #:hspace -0.15) ; D
-        (markup #:hspace -0.05))
-    )
+    ; Manual kerning adjustments
+    #:hspace (vector-ref #(0 -0.1 0 -0.3 0 0.1 0) pitch-ix)
   )
-))))
+))))))))
 
 #(define-markup-command (csub layout props arg) (string?)
   (interpret-markup layout props
-    (markup #:raise 0.5 (markup #:sub arg))))
+    (markup #:raise 0.75 (markup #:sub arg))))
 
 %----- markup commands to make it easier to write chords -----
 
@@ -165,6 +176,21 @@ JazzChordsList = {
   <c f g bes des' a'>-\markup { \csub #"13sus♯9" } % :sus4.7.13.9-
 }
 
+% Code for rootless slash chords
+#(define (rootless-chord-names in-pitches bass inversion context)
+   (ignatzek-chord-names `(,(ly:make-pitch 0 0 0) ,(ly:make-pitch 0 0 0)) bass inversion context))
+#(define (empty-namer pitch lower?) (make-simple-markup "﹘"))
+retainChordNoteNamer =
+\applyContext
+  #(lambda (context)
+     (let ((rn (ly:context-property context 'chordRootNamer)))
+       (ly:context-set-property! context 'chordNoteNamer rn)))
+rl = {
+  \retainChordNoteNamer
+  \once \set chordNameFunction = #rootless-chord-names
+  \once \set chordRootNamer = #empty-namer
+}
+
 % variable needed to use chord exceptions
 JazzChords = #(append (sequential-music-to-chord-exceptions JazzChordsList #t) ignatzekExceptions)
 
@@ -177,4 +203,3 @@ JazzChords = #(append (sequential-music-to-chord-exceptions JazzChordsList #t) i
     %\override ChordName.font-name = #"lilyjazz-chord"  % use the custom font for displaying the chords
   }
 }
-

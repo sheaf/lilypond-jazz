@@ -1,10 +1,8 @@
-#(set-global-staff-size 20.0)
-
-\include "sam-jazz-chords.ily"
+#(set-global-staff-size 21.0)
 
 \version "2.24.4"
-\pointAndClickOff
 
+\pointAndClickOff
 
 % A4 paper layout
 \paper {
@@ -16,6 +14,21 @@
     right-margin = 1.1\cm
     between-system-space = 0.5\cm
     indent = 0\cm
+
+    page-count = \numPages
+}
+
+\header {
+  title = \markup % \override #'(font-name . "Academico")
+    { \title
+    }
+  composer = \markup \column {
+    \vspace #-0.5
+    \composer
+  }
+
+  % Don't dsplay "Engraved by LilyPond"
+  tagline = ##f
 }
 
 \layout {
@@ -27,7 +40,7 @@
 
   % Set chord symbol font
   \override ChordName.font-name = "Academico"
-  \override ChordName.font-size = #2.2
+  \override ChordName.font-size = #2.4
 
   % Set lyrics font size
   \override LyricText.font-size = #-0.8
@@ -48,17 +61,35 @@
 
 }
 
-% Code for rootless slash chords
-#(define (rootless-chord-names in-pitches bass inversion context)
-   (ignatzek-chord-names `(,(ly:make-pitch 0 0 0) ,(ly:make-pitch 0 0 0)) bass inversion context))
-#(define (empty-namer pitch lower?) (make-simple-markup "﹘"))
-retainChordNoteNamer =
-\applyContext
-  #(lambda (context)
-     (let ((rn (ly:context-property context 'chordRootNamer)))
-       (ly:context-set-property! context 'chordNoteNamer rn)))
-rl = {
-  \retainChordNoteNamer
-  \once \set chordNameFunction = #rootless-chord-names
-  \once \set chordRootNamer = #empty-namer
+% The score definition
+\score {
+
+<<
+
+% Chords
+#(if WantChords
+#{ \chords \with {
+      % Move chords slightly further from staff
+      % In particular: don't allow them to be pushed into the staff due to lyrics
+      \override VerticalAxisGroup.nonstaff-relatedstaff-spacing.padding = #1.3
+     }
+    { \transpose bf \rootChoice \Chords }
+#})
+
+% Melody
+\context Voice = "Melody" { \transpose bf \rootChoice \Melody }
+
+% Lyrics
+#(if WantLyrics
+#{
+  \new Lyrics
+    \with {
+      % Move lyrics a bit closer to staff
+      \override VerticalAxisGroup.nonstaff-relatedstaff-spacing.padding = #0.8
+     }
+    \lyricsto "Melody" { \LyricsChoice }
+#})
+
+>>
+
 }

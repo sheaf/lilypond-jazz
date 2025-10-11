@@ -1,48 +1,40 @@
 \version "2.24.4"
 
 \include "sam-jazz-chords.ily"
-\include "template.ily"
 
-\header {
-  title = \markup % \override #'(font-name . "Academico")
-    { "My Foolish Heart"
-    }
-  composer = \markup \column {
-    \vspace #-0.5
-    "Victor Young"
-  }
+\language "english"
 
-  % Don't display "Engraved by LilyPond"
-  tagline = ##f
-}
-
+title = "My Foolish Heart"
+composer = "Victor Young"
+rootChoice = bf
+numPages = 1
 
 Chords = \chordmode {
   % Intro
-  | bes1  | g1:m9 | c2:m7 f2:7 | bes1:6.9   |
+  | bf1   | g1:m9 | c2:m7 f2:7 | bf1:6.9    |
   | g1:m7 | c1:9  | f1:7       | f1:7.8+.9+ |
 
   %A1
-  | bes2:maj9 ees2:maj7 | d2:m11 g2:7.13-    | c2:m9 \rl c2:m7/bes | a2:sus13 a2:9.13- |
-  | d2:m11    d2:7.9-   | g2:m7  des2:13.11+ | c1:m7               | c1:m7.11.5-       |
+  | bf2:maj9 ef2:maj7 | d2:m11 g2:7.13-   | c2:m9 \rl c2:m7/bf | a2:sus13 a2:9.13- |
+  | d2:m11    d2:7.9- | g2:m7  df2:13.11+ | c1:m7              | c1:m7.11.5-       |
 
   %B
-  | bes1:maj9           | f2:m6.9 bes2:9.13- | ees1:maj7           | a2:m7.5- d2:7 |
-  | g2:m      g2:m7.7+  | g2:m7   c2:7       | c2:m7     g2:7.13-  | c2:m7    f2:7 |
+  | bf1:maj9           | f2:m6.9 bf2:9.13- | ef1:maj7           | a2:m7.5- d2:7 |
+  | g2:m      g2:m7.7+ | g2:m7   c2:7      | c2:m7     g2:7.13- | c2:m7    f2:7 |
 
   %A2
-  | bes2:maj9 ees2:maj7 | d2:m11 g2:7.13-    | c2:m9 \rl c2:m7/bes | a2:sus13    a2:9.13-    |
-  | d2:m11    d2:7.9-   | g2:m7  des2:13.11+ | c2:m7 \rl c2:m7/bes | a2:m7.11.5- d2:7.9-.13- |
+  | bf2:maj9 ef2:maj7 | d2:m11 g2:7.13-   | c2:m9 \rl c2:m7/bf | a2:sus13    a2:9.13-    |
+  | d2:m11    d2:7.9- | g2:m7  df2:13.11+ | c2:m7 \rl c2:m7/bf | a2:m7.11.5- d2:7.9-.13- |
 
   %C
-  | g1:m7          | ges1:7                            | bes2:maj13 ees2:maj13 | d2:m7.5-      g2:7       |
-  | c2:m7 g2:7.13- | c4:9 c4:9.13- f4:sus13 f4:7.9-.9+ | bes2:6.9   g2:m9      | ges2:maj7.11+ f2:7.9-.9+ |
+  | g1:m7          | gf1:7                             | bf2:maj13 ef2:maj13 | d2:m7.5-      g2:7       |
+  | c2:m7 g2:7.13- | c4:9 c4:9.13- f4:sus13 f4:7.9-.9+ | bf2:6.9   g2:m9     | gf2:maj7.11+ f2:7.9-.9+ |
 
   % Coda
-  | bes2:6.9 g2:m9 | c2:m7 ces2:maj7.11+ | bes1:6.9 |
+  | bf2:6.9 g2:m9 | c2:m7 cf2:maj7.11+ | bf1:6.9 |
 }
 
-Lyrics = \lyricmode {
+LyricsEnglish = \lyricmode {
 %Verse
 The scene is set for drea -- ming
 Love's kno -- cking at the door
@@ -65,103 +57,118 @@ Be -- ware, my foo -- lish heart
 But should our ea -- ger lips com -- bine
 Then let the fi -- re start
 For this time, it is -- n't fa -- sci -- na -- tion
-Or a dream that will fade and fall apart
+Or a dream that will fade and fall a -- part
 It's love
 This time it's love, my foo -- lish heart
 
 }
 
-Melody = \relative bes' {
+Melody = \relative bf' {
 
 \clef "treble"
 \numericTimeSignature\time 4/4
-\key bes \major
+\key bf \major
 %\tempo 4=60
 
-\autoPageBreaksOff
+%\autoPageBreaksOff
 \set strictBeatBeaming = ##t
 
 \mark \markup { \bold \rounded-box { "Intro" } }
-r8 bes8 a8 bes8 a4 f4 |
+r8 bf8 a8 bf8 a4 f4 |
 a4 a2. |
-r8 g8 a8 bes8 c4 a4 |
+r8 g8 a8 bf8 c4 a4 |
 g1 | \break
 
-r8 bes8 bes8 bes8 d4 d8 d8 |
+r8 bf8 bf8 bf8 d4 d8 d8 |
 \times 2/3 { d4 d4 a4 } g2 |
 r8 c8 c8 c8 c4. d8 |
 c2. f,4 \bar "||" \break |
 
 \mark \markup { \bold \rounded-box { "A1" } }
-f2 ~ f8 bes,8 d8 f8 |
+f2 ~ f8 bf,8 d8 f8 |
 g8 a8 g2 g4 |
-g2 ~ g8 c,8 es8 g8 |
+g2 ~ g8 c,8 ef8 g8 |
 a2. a4 \break |
 
 a2 ~ a8 d,8 f8 a8 |
-bes8 c8 bes2 bes4 |
-bes2 ~ bes8 es,8 g8 bes8 |
-c2. bes8 c8 \bar "||" \break |
+bf8 c8 bf2 bf4 |
+bf2 ~ bf8 ef,8 g8 bf8 |
+c2. bf8 c8 \bar "||" \break |
 
 \mark \markup { \bold \rounded-box { "B" } }
-d4. d8 d4 c8 bes8 |
-d4 d4. d8 c8 bes8 |
-c4 c8 c8 c8 d8 c8 bes8 |
-c2. bes8 a8 \break |
+d4. d8 d4 c8 bf8 |
+d4 d4. d8 c8 bf8 |
+c4 c8 c8 c8 d8 c8 bf8 |
+c2. bf8 a8 \break |
 
-bes8 bes8 ~ bes8 bes8 bes8 c8 a8 g8 |
-bes4 bes2 g8 gis8 |
+bf8 bf8 ~ bf8 bf8 bf8 c8 a8 g8 |
+bf4 bf2 g8 gs8 |
 a4 a8 a8 a8 a8 g8 f8 |
 a2. g4 \bar "||" \break |
 
 \mark \markup { \bold \rounded-box { "A2" } }
-f2 ~ f8 bes,8 d8 f8 |
+f2 ~ f8 bf,8 d8 f8 |
 g8 a8 g2 g4 |
-g2 ~ g8 c,8 es8 g8 |
+g2 ~ g8 c,8 ef8 g8 |
 a2. a4 \break |
 
 a2 ~ a8 d,8 f8 a8 |
-bes8 c8 bes2 bes4 |
-bes2 ~ bes8 es,8 g8 bes8 |
+bf8 c8 bf2 bf4 |
+bf2 ~ bf8 ef,8 g8 bf8 |
 d2. c4 \bar "||" \break |
 
 \mark \markup { \rounded-box { \bold "C" } }
-bes8 bes8 ~ bes8 bes8 bes8 a8 g8 a8 |
-bes4 bes2 bes8 c8 |
-d4. d8 d8 d8 c8 bes8 |
+bf8 bf8 ~ bf8 bf8 bf8 a8 g8 a8 |
+bf4 bf2 bf8 c8 |
+d4. d16 [ d16 d8 d8 c8 bf8 ] |
 d,2. g4 \break |
 
-bes2 ~ bes8 es,8 g8 bes8 |
-c4 d4 bes4 c4 |
-\mark \markup { \musicglyph "scripts.coda" } bes1 ~ |
-bes1 \bar "|." \break |
+bf2 ~ bf8 ef,8 g8 bf8 |
+c4 d4 bf4 c4 |
+\mark \markup { \musicglyph "scripts.coda" } bf1 ~ |
+bf1 \bar "|." \break |
 
 % Coda
-\mark \markup { \musicglyph "scripts.coda" } bes4 f4 g8 f8 g8 bes8 |
+\mark \markup { \musicglyph "scripts.coda" } bf4 f4 g8 f8 g8 bf8 |
 c4 d4 f4 d4 |
 c1 \bar "|."
 }
 
 
-% The score definition
+#(define WantChords #t)
+#(define WantLyrics #t)
+LyricsChoice = \LyricsEnglish
+
+\include "template.ily"
+
+%{ TODO: code for rhythm slashes
+
+%% http://lsr.di.unimi.it/LSR/Item?id=749
+
+
 \score {
-
-<<
-  \chords \with {
-      % Move chords slightly further from staff
-      % In particular: don't allow them to be pushed into the staff due to lyrics
-      \override VerticalAxisGroup.nonstaff-relatedstaff-spacing.padding = #1.5
-     }
-    { \Chords }
-  \context Voice = "Melody" { \Melody }
-  \new Lyrics
-    \with {
-      % Move lyrics a bit closer to staff
-      \override VerticalAxisGroup.nonstaff-relatedstaff-spacing.padding = #0.8
-     }
-    \lyricsto "Melody" { \Lyrics }
->>
-\layout {
+  <<
+    \new ChordNames \chords {
+      d4.:m g:7 c4
+    }
+    \new RhythmicStaff {
+      \override NoteHead.style = #'slash
+      \override NoteHead.font-size = #-4
+      c4. c8~c4 c
+    }
+    \new Staff { d''8 c'' b' g' a' b' c''4 }
+  >>
+  \layout {
+    \context {
+      \RhythmicStaff
+      \remove "Time_signature_engraver"
+      \remove "Clef_engraver"
+      \override BarLine.transparent = ##t
+      \override StaffSymbol.line-count = #0
+    }
+  }
 }
-}
 
+
+
+%}
