@@ -9,6 +9,8 @@ composer = "Victor Young"
 rootChoice = bf
 numPages = 1
 
+%sectionBarType
+
 Chords = \chordmode {
   % Intro
   | bf1   | g1:m9 | c2:m7 f2:7 | bf1:6.9    |
@@ -46,7 +48,7 @@ The night is like a lo -- vely tune
 Be -- ware, my foo -- lish heart
 How white the e -- ver con -- stant moon
 Take care, my foo -- lish heart
-There's a line be -- tween love and fasci -- nation
+There's a line be -- tween love and fa -- sci -- na -- tion
 That's hard to see, on an eve -- ning such as this
 For they both give the ve -- ry same sen -- sa -- tion
 When you're lost in the ma -- gic of a kiss
@@ -68,7 +70,7 @@ Melody = \relative bf' {
 \clef "treble"
 \numericTimeSignature\time 4/4
 \key bf \major
-%\tempo 4=60
+\tempo \markup { \fontsize #-0.5 "Jazz ballad" } 4=60
 
 %\autoPageBreaksOff
 \set strictBeatBeaming = ##t
@@ -82,54 +84,55 @@ g1 | \break
 r8 bf8 bf8 bf8 d4 d8 d8 |
 \times 2/3 { d4 d4 a4 } g2 |
 r8 c8 c8 c8 c4. d8 |
-c2. f,4 \bar "||" \break |
+c2. f,4 | \break
 
-\mark \markup { \bold \rounded-box { "A1" } }
+\mark \markup { \bold \rounded-box { "A1" } } \section
 f2 ~ f8 bf,8 d8 f8 |
 g8 a8 g2 g4 |
 g2 ~ g8 c,8 ef8 g8 |
-a2. a4 \break |
+a2. a4 | \break
 
 a2 ~ a8 d,8 f8 a8 |
 bf8 c8 bf2 bf4 |
 bf2 ~ bf8 ef,8 g8 bf8 |
-c2. bf8 c8 \bar "||" \break |
+c2. bf8 c8 | \break
 
-\mark \markup { \bold \rounded-box { "B" } }
-d4. d8 d4 c8 bf8 |
-d4 d4. d8 c8 bf8 |
+\mark \markup { \bold \rounded-box { "B" } } \section
+d4. d16 d16 d8 d8 c8 bf8 |
+d4 d4 ~ d8 d8 c8 bf8 |
 c4 c8 c8 c8 d8 c8 bf8 |
-c2. bf8 a8 \break |
+c2. bf8 a8 | \break
 
 bf8 bf8 ~ bf8 bf8 bf8 c8 a8 g8 |
 bf4 bf2 g8 gs8 |
 a4 a8 a8 a8 a8 g8 f8 |
-a2. g4 \bar "||" \break |
+a2. g4 | \break
 
-\mark \markup { \bold \rounded-box { "A2" } }
+\mark \markup { \bold \rounded-box { "A2" } } \section
 f2 ~ f8 bf,8 d8 f8 |
 g8 a8 g2 g4 |
 g2 ~ g8 c,8 ef8 g8 |
-a2. a4 \break |
+a2. a4 | \break
 
 a2 ~ a8 d,8 f8 a8 |
 bf8 c8 bf2 bf4 |
 bf2 ~ bf8 ef,8 g8 bf8 |
-d2. c4 \bar "||" \break |
+d2. c4 | \break
 
-\mark \markup { \rounded-box { \bold "C" } }
+\mark \markup { \rounded-box { \bold "C" } }  \section
 bf8 bf8 ~ bf8 bf8 bf8 a8 g8 a8 |
 bf4 bf2 bf8 c8 |
-d4. d16 [ d16 d8 d8 c8 bf8 ] |
-d,2. g4 \break |
+d4. d16 d16 d8 d8 c8 bf8 |
+d,2. g4 | \break
 
 bf2 ~ bf8 ef,8 g8 bf8 |
 c4 d4 bf4 c4 |
 \mark \markup { \musicglyph "scripts.coda" } bf1 ~ |
-bf1 \bar "|." \break |
+bf1 \bar "|." | \break
 
 % Coda
-\mark \markup { \musicglyph "scripts.coda" } bf4 f4 g8 f8 g8 bf8 |
+\mark \markup { \musicglyph "scripts.coda" } \section
+bf4 f4 g8 f8 g8 bf8 |
 c4 d4 f4 d4 |
 c1 \bar "|."
 }
