@@ -12,8 +12,8 @@
 #(define (JazzChordNames pitch majmin)	;majmin is a required argument for "chordNamer", but not used here
   (let* ((alt (ly:pitch-alteration pitch)))(
    let* ((alt-ix (+ 2 (* 2 alt))))(
-   let* ((alt-scale (vector-ref #(0.9 0.8 0 0.8 1.3) alt-ix)))(
-   let* ((alt-raise (vector-ref #(0.8 0.8 0.8 0.8 -1.2) alt-ix)))(
+   let* ((alt-scale (vector-ref #(1.0 0.9 0 0.9 1.6) alt-ix)))(
+   let* ((alt-raise (vector-ref #(0.6 0.7 0.8 0.8 -1.4) alt-ix)))(
    let* ((pitch-ix (ly:pitch-notename pitch)))(
     make-line-markup
       (list
@@ -27,8 +27,8 @@
       ; Make the alteration relatively big, between super and normal-size-super
       (markup
         ; Move the alteration closer to some letters (A, D)
-        #:hspace (vector-ref #(0 -0.1 0 0 0 -0.3 0) pitch-ix)
-        #:hspace (vector-ref #(-0.3 -0.2 0 -0.2 -0.1) alt-ix)
+        #:hspace (vector-ref #(0 -0.1 0 0.1 0 -0.3 0) pitch-ix)
+        #:hspace (vector-ref #(-0.4 -0.15 0 -0.2 -0.1) alt-ix)
         #:scale (cons alt-scale alt-scale)
         #:raise alt-raise
         #:normal-size-super
@@ -37,10 +37,10 @@
         )
         ; Make the alteration width 0 because it's a superscript,
         ; which means it doesn't overlap with the subscript.
-        #:hspace (vector-ref #(-1.7 -0.8 0 -0.8 -1.2) alt-ix)
+        #:hspace (vector-ref #(-1.7 -1.0 0 -0.9 -1.4) alt-ix)
 
         ; Re-adjust for per-letter alteration adjustement
-        #:hspace (vector-ref #(0 0.1 0 0 0 0.3 0) pitch-ix)
+        #:hspace (vector-ref #(0 0.2 0 0 0 0.4 0) pitch-ix)
       )
     )
     ; Manual kerning adjustments
@@ -202,8 +202,8 @@ JazzChords = #(append (sequential-music-to-chord-exceptions JazzChordsList #t) i
     chordNameExceptions = #JazzChords	% update the chord exceptions
 
     % Set chord symbol font
-    \override ChordName.font-name = "Academico"
-    \override ChordName.font-size = #2.4
+    \override ChordName.font-name = "Academico, Bold"
+    \override ChordName.font-size = #2.3
 
   }
 }
