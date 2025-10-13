@@ -1,10 +1,10 @@
 \version "2.24.4"
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Creating jazz-style chords
-% Borrowed from Jean-Pierre's good work at:
-%               https://sites.google.com/site/jpgzic/home
+% My tweaks to https://github.com/OpenLilyPondFonts/lilyjazz
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% TODO: see also https://github.com/martineausimon/lilypond-lib
 
 
 % modification of the procedure "chordRootNamer"
