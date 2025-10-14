@@ -12,6 +12,8 @@ rootChoice = g
 numPages = 2
 staffSize = 20.0
 lyricsSize = 0
+WantLyrics = ##f
+WantChords = ##t
 
 Chords = \chordmode {
 
@@ -52,19 +54,19 @@ Chords = \chordmode {
 }
 
 % Rhythm markings
-MyRhythm = \relative b''
- { | s1 * 16 |
-   | \repeatTie b4. 4. 4 ~ | 4 2~8 8~ | 4. 4. 4~ | 4 2. |
-   | s1 * 2 | b2 c8 \rest b4. | s1 |
+ChordRhythms = { \voiceOne \stemUp \relative b'' {
+  | s1 * 16 |
+  | \repeatTie b4. 4. 4 ~ | 4 2~8 8~ | 4. 4. 4~ | 4 2. |
+  | s1 * 2 | b2 c8 \rest b4. | s1 |
 
-   | s1 * 4 |
-   | \repeatTie b4. 4. 4 ~ | 4 2~8 8~ | 4. 4. 4~ | 4 2. |
+  | s1 * 4 |
+  | \repeatTie b4. 4. 4 ~ | 4 2~8 8~ | 4. 4. 4~ | 4 2. |
 
-   | s1 * 4 |
-   | b4 4. 4 4. | 4 4. 4 4. | 4 4. 4 4. | 4 4. 4 4. |
+  | s1 * 4 |
+  | b4 4. 4 4. | 4 4. 4 4. | 4 4. 4 4. | 4 4. 4 4. |
 
-   | s1 * 15 |
- }
+  | s1 * 15 |
+ }}
 
 breveFiveFour =
 #(define-music-function (note) (ly:music?)
@@ -77,8 +79,10 @@ Melody = \relative g' {
 
 \clef "treble"
 \numericTimeSignature\time 4/4
-\key d \major % D major = G lydian
+\key g \lydian
 \tempo \markup { \fontsize #-0.5 "Funk/fusion" } 4=124
+
+\shiftOff
 
 \mark \markup { \bold \rounded-box { "Intro" } }
 r4 a2  gs8 fs8 | e4 cs8 a8~8 cs8~8 b8~|1~|2 r2 | \break
@@ -122,141 +126,4 @@ fs1 | r4 e d8 e~e fs~ | \break
   }
 }
 
-#(set-global-staff-size staffSize)
-
-\version "2.24.4"
-
-\pointAndClickOff
-
-% A4 paper layout
-\paper {
-    paper-width = 21.0\cm
-    paper-height = 29.7\cm
-    top-margin = 0.4\cm
-    bottom-margin = 1.3\cm
-    left-margin = 1.2\cm
-    right-margin = 0.7\cm
-    between-system-space = 0.5\cm
-    indent = 0\cm
-    print-first-page-number = ##t
-    page-count = \numPages
-
-  oddHeaderMarkup = \markup
-    \fill-line {
-      { \unless \on-first-page { \fromproperty #'header:title " " } }
-      \null
-      \if \should-print-page-number \line {
-        \fromproperty #'page:page-number-string / \page-ref #'last "0" "?"
-      }
-    }
-
-  evenHeaderMarkup = \markup
-    \fill-line {
-      \fromproperty #'header:title
-      \null
-      \if \should-print-page-number \line {
-        \fromproperty #'page:page-number-string / \page-ref #'last "0" "?"
-      }
-    }
-
-}
-
-\header {
-  title = \markup % \override #'(font-name . "Academico, Bold")
-    { \fontsize #-1 \title
-    }
-  composer = \markup {
-    \column {
-      \vspace #-0.7
-      \fontsize #-0.5 \bold \composer
-    }
-    \hspace #2
-  }
-
-  % Don't dsplay "Engraved by LilyPond"
-  tagline = ##f
-}
-
-\layout {
-
-  % Adjust tempo marking position
-  \override Score.MetronomeMark.self-alignment-X = #-1.1
-  \override Score.MetronomeMark.break-align-symbols = #'(clef)
-
-  % Adjust rehearsal mark position
-  \override Score.RehearsalMark.self-alignment-X = #0.8
-  %\override Score.RehearsalMark.padding = #0.1
-  %\override Score.RehearsalMark.Y-offset = #-3
-
-  % Set lyrics font size
-  \override LyricText.font-size = \lyricsSize
-
-
-
-  \context { \Score
-
-    % Hide bar numbers
-    \remove "Bar_number_engraver"
-
-    % Add an initial barline for staff groups,
-    % even when there's only one staff in the group.
-    \override SystemStartBar.collapse-height = 0
-
-    % Hide clef and key signature on subsequent staves
-    \override Clef.break-visibility = #'#(#f #f #f)
-    \override KeySignature.break-visibility = #'#(#f #f #f)
-
-    % Winged repeat signs
-    startRepeatBarType = "[|:"
-    doubleRepeatBarType = ":|][|:"
-    endRepeatBarType = ":|]"
-
-  }
-
-  \context {
-    \RhythmicStaff
-    \remove "Time_signature_engraver"
-    \remove "Clef_engraver"
-    \override BarLine.transparent = ##t
-    \override StaffSymbol.line-count = #0
-    \override NoteHead.style = #'slash
-    \override NoteHead.font-size = #-2
-  }
-
-  \context {
-    \Voice
-  }
-
-
-}
-
-% The score definition
-\score {
-
-<<
-
-% Chords
-\new ChordNames \chords \with {
-      % Move chords slightly further from staff
-      % In particular: don't allow them to be pushed into the staff due to lyrics
-      \override VerticalAxisGroup.nonstaff-relatedstaff-spacing.padding = #1.3
-     }
-    { \transpose \scoreRoot \rootChoice \Chords }
-
-% Chord rhythm
-\new Staff <<
-  \new Voice = "rhythm" \with
-   { \override NoteHead.style = #'slash
-     \override NoteHead.font-size = #-3
-     \override NoteHead.no-ledgers = ##t
-     \override Stem.details.lengths = #'(3.3)
-     \override Stem.details.beam-lengths = #'(3.3)
-   } { \voiceOne \stemUp \MyRhythm }
-
-% Melody
-  \new Voice = "Melody" { \shiftOff \transpose \scoreRoot \rootChoice \Melody \label "last" }
->>
->>
-
-}
-
+\include "lead-sheet.ily"

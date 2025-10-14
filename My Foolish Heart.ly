@@ -6,6 +6,7 @@
 
 title = "My Foolish Heart"
 composer = "Victor Young"
+scoreRoot = bf
 rootChoice = bf
 numPages = 1
 staffSize = 19.0
@@ -141,5 +142,6 @@ c1 \bar "|."
 #(define WantChords #t)
 #(define WantLyrics #t)
 LyricsChoice = \Lyrics_English
+#(define ChordRhythms #f)
 
 \include "lead-sheet.ily"
