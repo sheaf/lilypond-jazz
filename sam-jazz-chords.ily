@@ -4,8 +4,14 @@
 % My tweaks to https://github.com/OpenLilyPondFonts/lilyjazz
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% TODO: see also https://github.com/martineausimon/lilypond-lib
-
+% From https://github.com/martineausimon/lilypond-lib
+% This prevents rhythms hits from being transposed
+marquage =
+#(define-music-function (mus)
+   (ly:music?)
+   #{
+     \new Voice \with { \consists Pitch_squash_engraver }
+     { \improvisationOn $mus \improvisationOff } #})
 
 % modification of the procedure "chordRootNamer"
 %---- Definition of chord alterations -------

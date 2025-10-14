@@ -101,7 +101,7 @@ fs1 | r4 e d8 e~e fs~ | \break
 1~|2.. 8~|2 d8 e~e fs~|1| \break
 
 \mark \markup { \rounded-box { \bold "C" } }  \section
-\improvisationOn b4. b4. b4 ~ | 4 \improvisationOff b8 cs \tuplet 3/2 { c b a } fs a |
+\marquage { b4. b4. b4 ~ | 4 } b8 cs \tuplet 3/2 { c b a } fs a |
 cs ds cs2.~ | 2 b4 a | \break
 
 \time 5/4
@@ -120,9 +120,9 @@ fs1 | r4 e d8 e~e fs~ | \break
 
 % Coda
 \mark \markup { \musicglyph "scripts.coda" } \section
-  | \repeatTie \improvisationOn b,4 4 ~ 4. b8 ~ |
+  | \repeatTie \marquage{ b4 4 ~ 4. b8 ~ |
   \repeat volta 2 {
-    |  b4. b8 ~ 4 b4 ~ | 4 b4 ~ 4. b8 \laissezVibrer \improvisationOff |
+    |  b4. b8 ~ 4 b4 ~ | 4 b4 ~ 4. b8 \laissezVibrer } |
   }
 }
 
