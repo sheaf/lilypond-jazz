@@ -8,7 +8,7 @@
 \paper {
     paper-width = 21.0\cm
     paper-height = 29.7\cm
-    top-margin = 0.4\cm
+    top-margin = 0.7\cm
     bottom-margin = 1.3\cm
     left-margin = 1.2\cm
     right-margin = 0.7\cm
@@ -53,9 +53,19 @@
     \column {
       \vspace #-0.7
       \fontsize #-0.5 \bold \composer
+      \hspace #2
     }
-    \hspace #2
   }
+  arranger =
+    #(if (and (defined? 'arranger) (not (string-null? arranger)))
+       #{ \markup {
+            \column {
+              \vspace #-0.7
+              \line { \fontsize #-1.5 { "arr: " \arranger } }
+              \hspace #2
+            }
+          } #}
+       #{ \markup {} #})
 
   % Don't display "Engraved by LilyPond"
   tagline = ##f
@@ -113,12 +123,7 @@
 % Lyrics
 #(if WantLyrics
 #{
-  \new Lyrics
-    \with {
-      % Move lyrics a bit closer to staff
-      \override VerticalAxisGroup.nonstaff-relatedstaff-spacing.padding = #0.8
-     }
-    \lyricsto "Melody" { \LyricsChoice }
+  \new Lyrics \lyricsto "Melody" { \LyricsChoice }
 #})
 
 >>
@@ -165,6 +170,9 @@
     % Hide clef and key signature on subsequent staves
     \override Clef.break-visibility = #'#(#f #f #f)
     \override KeySignature.break-visibility = #'#(#f #f #f)
+
+    % Move lyrics a bit closer to staff
+    \override VerticalAxisGroup.nonstaff-relatedstaff-spacing.padding = #0.8
 
     % Winged repeat signs
     startRepeatBarType = "[|:"
