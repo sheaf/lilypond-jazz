@@ -22,7 +22,11 @@
       { \unless \on-first-page { \fromproperty #'header:title " " } }
       \null
       \if \should-print-page-number \line {
-        \fromproperty #'page:page-number-string / \page-ref #'lastPgNo "0" "?"
+        \raise #0.9 \scale #'(0.7 . 0.7) \fromproperty #'page:page-number-string
+        \hspace #-0.3
+        \raise #0.2 \rotate#-30 \scale #'(0.3 . 0.5) "|"
+        \hspace #-0.4
+        \lower #0.9 \scale #'(0.7 . 0.7) \page-ref #'lastPgNo "0" "?"
       }
     }
 
@@ -31,7 +35,11 @@
       \fromproperty #'header:title
       \null
       \if \should-print-page-number \line {
-        \fromproperty #'page:page-number-string / \page-ref #'lastPgNo "0" "?"
+        \raise #0.9 \scale #'(0.7 . 0.7) \fromproperty #'page:page-number-string
+        \hspace #-0.3
+        \raise #0.2 \rotate#-30 \scale #'(0.3 . 0.5) "|"
+        \hspace #-0.4
+        \lower #0.9 \scale #'(0.7 . 0.7) \page-ref #'lastPgNo "0" "?"
       }
     }
 
@@ -66,11 +74,29 @@
   % Move chords slightly further from staff
   % In particular: don't allow them to be pushed into the staff due to lyrics
   \override VerticalAxisGroup.nonstaff-relatedstaff-spacing.padding = #1.3
+
+  % Align chord names to the bottom not the center,
+  % so that there isn't huge amounts of vertical space when slash chords
+  % are involved.
+  \override ChordName.stencil =
+     #(lambda (grob)
+        (let* ((stencil (ly:text-interface::print grob))
+               (ext (ly:stencil-extent stencil Y))
+               (bottom (car ext))
+               )
+         (if (finite? bottom)
+           (ly:stencil-translate stencil (cons 0 (- bottom)))
+           stencil
+         )
+        )
+      )
   }
   { \transpose \scoreRoot \rootChoice \Chords }
 #})
 
 \new Staff <<
+
+  \Form
 
 % Chord rhythm
 #(if (and WantChords ChordRhythms)
@@ -145,5 +171,11 @@
     doubleRepeatBarType = ":|][|:"
     endRepeatBarType = ":|]"
 
+    % Use upright+bold for D.S., D.C. etc
+    dalSegnoTextFormatter =
+      #(lambda (context return-count marks)
+         (let ((m (format-dal-segno-text context return-count marks)))
+           (and m (markup #:upright #:bold m)))
+       )
   }
 }}

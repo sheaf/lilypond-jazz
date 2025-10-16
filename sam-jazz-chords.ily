@@ -84,6 +84,10 @@ marquage =
   (interpret-markup layout props
     (markup #:csub "+" #:csub extension)))
 
+#(define-markup-command (acAdd layout props extension) (string?)
+  (interpret-markup layout props
+    (markup #:hspace 0.1 #:scale (cons 0.5 0.5) #:lower 0.45 "add" #:hspace 0.15 #:csub extension)))
+
 %{
 % for chords with up to three alterations, stacked on top of each other
 #(define-markup-command (acAlt layout props strA strB strC) (string? string? string?)
@@ -142,8 +146,9 @@ JazzChordsList = {
   <c es ges bes f'>-\markup { \acHalf #"11" } % :m7.11.5-
   <c es g bes d' f' a'>-\markup { \acMin #"13" } % :m13
 
-% major third chords - 5 notes
-  <c e g d'>-\markup { \csub #"(9)" } % :5.9
+% major third chords
+  <c e g a>-\markup { \csub #"6" } % :6
+  <c e g d'>-\markup { \acAdd #"9" } % :5.9
   <c e g a d'>-\markup { \csub #"6/9" }	% :6.9
 
 % dominant chords
@@ -170,16 +175,20 @@ JazzChordsList = {
   <c e g bes cis' dis' a'>-\markup { \csub #"13♭9♯9" } % :13.8+.9+
   <c e g bes cis' dis' aes'>-\markup { \csub #"♭9♯9♭13" } % :13-.8+.9+
 
-% suspended chords
+  % suspended chords
   <c d g>-\markup { \csub #"sus2" } % :sus2
   <c f g>-\markup { \csub #"sus4" } % :sus4
   <c f g bes>-\markup { \csub #"7sus4" } % :sus4.7
-  <c f g bes d'>-\markup { \csub #"9sus" } % :sus4.7.9
+  <c f g bes d'>-\markup { \csub #"9sus4" } % :sus4.7.9
   <c f g a>-\markup { \csub #"6sus" } % :sus4.6
   <c f g bes a'>-\markup { \csub #"13sus" } % :sus4.7.13
   <c f g a'>-\markup { \csub #"13sus" } % :sus13
   <c f g bes des'>-\markup { \csub #"7sus4♯9" } % :sus4.7.9-
   <c f g bes des' a'>-\markup { \csub #"13sus♯9" } % :sus4.7.13.9-
+
+  % add 11
+  <c e g f'>-\markup { \acAdd #"11" } % :3.5.11
+  <c e g d' f'>-\markup { \acAdd #"9/11" } % :3.5.9.11
 }
 
 % Code for rootless slash chords
@@ -195,10 +204,21 @@ rl = {
   \retainChordNoteNamer
   \once \set chordNameFunction = #rootless-chord-names
   \once \set chordRootNamer = #empty-namer
+
+  % Keep normal (non-lower) separator for rootless
+  \once \set slashChordSeparator = "/"
 }
 
 % variable needed to use chord exceptions
 JazzChords = #(append (sequential-music-to-chord-exceptions JazzChordsList #t) ignatzekExceptions)
+
+% Custom kerning for slash chords (pt. 1)
+#(define (lower-root pitch chbass)
+   "Return lowered markup for pitch note name."
+   #{
+     \markup \raise #-2.6 \halign #0.2
+     #(JazzChordNames pitch chbass)
+   #})
 
 % modify the default ChordNames context
 \layout {
@@ -206,6 +226,14 @@ JazzChords = #(append (sequential-music-to-chord-exceptions JazzChordsList #t) i
     \ChordNames
     chordRootNamer = #JazzChordNames	% update the chord names
     chordNameExceptions = #JazzChords	% update the chord exceptions
+    chordNoteNamer = #lower-root      % root notes in slash notation
+
+    % Custom kerning for slash chords (pt. 2)
+    slashChordSeparator = \markup {
+      \hspace #-1.6
+      \lower #1.0 \rotate#-50 \scale #'(0.9 . 0.9) "|"
+      \hspace #-1.3
+    }
 
     % Set chord symbol font
     \override ChordName.font-name = "Academico, Bold"
