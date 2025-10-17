@@ -143,7 +143,7 @@ Melody = \relative bf' {
   | g4. g16 f g f g8. f16 f8 ~ |
   | 8 d4. \breathe r8 bf8 f'8 ef8 ~ |
   | 4. ~ ( 16 d16 c8. bf8. g8 ~ ) |
-  | 4 \breathe r8. f16 g8 g g16 f f8 ~ |
+  | 4 \breathe r8. f16 g8 g g16 f f8 ~ | \pageBreak
 
   % I
   | 2 r2 | R1*2 |
@@ -172,7 +172,7 @@ Melody = \relative bf' {
   | g4. g16 f g f g8. f16 f8 ~ |
   | 8 d4. \breathe r8 bf8 f'8 ef8 ~ |
   | 4. ~ ( 16 d16 c8. bf8. g8 ~ ) |
-  | 4 \breathe r8. f16 g8 g g16 f f8 ~ |
+  | 4 \breathe r8. f16 g8 g g16 f f8 ~ | \pageBreak
 
   % A1'
   | 8 d'4. ~ 8 f4. ~ | 4 r4 r8 g8 f16 f8. ~ |
