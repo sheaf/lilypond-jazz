@@ -138,7 +138,7 @@ Melody = \relative bf' {
 
   % B
   | 4.. f16 g16 f16 g8 ~ g16 f16 f8 ~ | 8 d4. \breathe r8 bf16 d16 ~ 16 f g8 ~ |
-  | 4.. f16 g f g8 f f ~ |
+  | 4.. f16 g f g8 d f ~ |
   | f4. r8 \breathe r8 bf,16 \acciaccatura a'8 ( bf16 ) ~ 16 a8. |
   | g4. g16 f g f g8. f16 f8 ~ |
   | 8 d4. \breathe r8 bf8 f'8 ef8 ~ |
@@ -167,7 +167,7 @@ Melody = \relative bf' {
 
   % B
   | 2 g16 f16 g8 ~ g16 f16 f8 ~ | 8 d4. \breathe r8 bf16 d16 ~ 16 f g8 ~ |
-  | 4.. f16 g f g8 f f ~ |
+  | 4.. f16 g f g8 d f ~ |
   | f4. r8 \breathe r8 bf,16 \acciaccatura a'8 ( bf16 ) ~ 16 a8. |
   | g4. g16 f g f g8. f16 f8 ~ |
   | 8 d4. \breathe r8 bf8 f'8 ef8 ~ |
