@@ -1,0 +1,26 @@
+List of potentially useful snippets, for reference
+
+
+Moving tempo markings/metronome sign
+https://lsr.di.unimi.it/LSR/Item?id=13
+
+Moving placement of chord names
+https://lsr.di.unimi.it/LSR/Item?id=895
+
+Jazz-style multi-measure repeats
+https://lsr.di.unimi.it/LSR/Item?id=753
+
+Ties & arpeggios and the "wait for note" property
+https://lsr.di.unimi.it/LSR/Item?id=408
+
+Customising chord symbol text
+https://lsr.di.unimi.it/LSR/Item?id=517
+
+Chord names + lyrics but no staff
+https://lsr.di.unimi.it/LSR/Item?id=536
+
+Parentheses around notes
+https://lsr.di.unimi.it/LSR/Item?id=318
+
+Repeat % signs in chord notation
+https://lsr.di.unimi.it/LSR/Item?id=993
