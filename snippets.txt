@@ -24,3 +24,47 @@ https://lsr.di.unimi.it/LSR/Item?id=318
 
 Repeat % signs in chord notation
 https://lsr.di.unimi.it/LSR/Item?id=993
+
+
+
+
+
+% Chord diagrams
+#(if ##t ;WantDiagrams
+#{
+\score {
+<<
+  \new ChordNames {
+    \override ChordName.stencil =
+      #(grob-transformer 'stencil
+         (lambda (grob orig)
+           (ly:stencil-scale orig 0.55 0.55)))
+    \DiagramChords
+  }
+  \new FretBoards {
+    % Make dots contain finger numbers
+    \override FretBoard.fret-diagram-details.finger-code = #'in-dot
+    % Adjust dot size
+    \override FretBoard.fret-diagram-details.dot-radius = #0.35
+    % Use arabic numerals for fret number
+    \override FretBoard.fret-diagram-details.number-type = #'arabic
+    \DiagramChords
+  }
+>>
+  \layout {
+    indent = 0
+    ragged-right = ##f
+    \context {
+      \FretBoards
+      \override VerticalAxisGroup.staff-affinity = #CENTER
+      \override FretBoard.padding = #2.0
+      \override VerticalAxisGroup.default-staff-staff-spacing.padding = #2
+    }
+    \context {
+      \Score
+      \remove "Bar_number_engraver"
+      \remove "Bar_engraver"
+    }
+  }
+}
+#})

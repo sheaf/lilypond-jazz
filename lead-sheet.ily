@@ -6,12 +6,15 @@
 
 % A4 paper layout
 \paper {
+
+    ragged-bottom = ##f
+
     paper-width = 21.0\cm
     paper-height = 29.7\cm
     top-margin = 0.7\cm
-    bottom-margin = 1.3\cm
-    left-margin = 1.2\cm
-    right-margin = 0.7\cm
+    bottom-margin = 0.9\cm
+    left-margin = 1.4\cm
+    right-margin = 0.9\cm
     between-system-space = 0.5\cm
     indent = 0\cm
     print-first-page-number = ##t
@@ -43,6 +46,13 @@
       }
     }
 
+  % Controls the space between the title/header and the first system
+  markup-system-spacing = #'(
+    (basic-distance . 5)
+    (minimum-distance . 2)
+    (padding . -6)
+    (stretchability . 0)
+  )
 }
 
 \header {
@@ -72,74 +82,123 @@
 }
 
 
+% Print barlines & time signatures for chords if there are no other staves.
+chordBarEngraver =
+  #(if (not (or (false-if-exception WantMelody) (false-if-exception WantBass)))
+  #{ \with {
+     \consists "Bar_engraver"
+     \override BarLine.bar-extent = #'(-2 . 2)
+     \consists "Time_signature_engraver"
+  }#}
+  #{ \with {} #}
+  )
+
+% For a chord-only score, make all bars line up by using proportional notation.
+setNoteProportions =
+  #(if (not (or (false-if-exception WantMelody) (false-if-exception WantBass)))
+  #{
+    \with {
+      proportionalNotationDuration = #(ly:make-moment 1/8)
+      \override SpacingSpanner.strict-note-spacing = ##t
+      \override SpacingSpanner.uniform-stretching = ##t
+    }
+  #}
+  #{ \with { } #}
+)
+
 % The score definition
 \score {
 
 <<
 
-% Chords
-#(if WantChords
+% Chord diagrams
+#(if (false-if-exception WantDiagrams)
 #{
-\new ChordNames \chords \with {
-  % Move chords slightly further from staff
-  % In particular: don't allow them to be pushed into the staff due to lyrics
-  \override VerticalAxisGroup.nonstaff-relatedstaff-spacing.padding = #1.3
+\new FretBoards \with {
+  % Make dots contain finger numbers
+  \override FretBoard.fret-diagram-details.finger-code = #'in-dot
+  % Adjust dot size
+  \override FretBoard.fret-diagram-details.dot-radius = #0.42
 
-  % Align chord names to the bottom not the center,
-  % so that there isn't huge amounts of vertical space when slash chords
-  % are involved.
-  \override ChordName.stencil =
-     #(lambda (grob)
-        (let* ((stencil (ly:text-interface::print grob))
-               (ext (ly:stencil-extent stencil Y))
-               (bottom (car ext))
-               )
-         (if (finite? bottom)
-           (ly:stencil-translate stencil (cons 0 (- bottom)))
-           stencil
-         )
-        )
-      )
-  }
-  { \transpose \scoreRoot \rootChoice \Chords }
+  % Use arabic numerals for fret number
+  \override FretBoard.fret-diagram-details.number-type = #'arabic
+  % Put fret number to the left
+  \override FretBoard.fret-diagram-details.label-dir = #LEFT
+  % Make fret number larger
+  \override FretBoard.fret-diagram-details.fret-label-font-mag = #0.6
+  % Move fret number up
+  \override FretBoard.fret-diagram-details.fret-label-vertical-offset = #-1.1
+  \override FretBoard.fret-diagram-details.fret-label-horizontal-offset = #0.3
+
+  % Use bar for barre
+  \override FretBoard.fret-diagram-details.barre-type = #'straight
+
+  \override FretBoard.font-series = #'bold
+
+  % Reduce padding
+  \override VerticalAxisGroup.staff-affinity = ##f
+  \override VerticalAxisGroup.staff-staff-spacing =
+    #'((basic-distance . 0.0)
+       (minimum-distance . 0.0)
+       (padding . 0.6)
+       (stretchability . 0))
+
+  % Move diagrams slightly to the right
+  \override FretBoard.extra-offset = #'(1.0 . 0)
+
+  \override FretBoard.color = #(x11-color 'grey30)
+
+  } { \keepWithTag #'diagram \Chords }
 #})
 
+
+% Chords
+#(if (false-if-exception WantChords)
+#{
+\new ChordNames \with {
+
+  % Add barlines/time signatures if there are no other staves.
+  \chordBarEngraver
+
+  % For small asterisks on alternate chords
+  \consists "Text_engraver"
+
+  % For repeat percent signs
+  \consists "Percent_repeat_engraver"
+
+  } \chordmode
+  { \transpose \scoreRoot \rootChoice { \keepWithTag #'score \Chords }
+  \label "lastPgNo" }
+#})
+
+#(if (false-if-exception WantMelody)
+#{
 \new Staff <<
 
-  \Form
+    \Form
 
 % Chord rhythm
-#(if (and WantChords ChordRhythms)
+#(if (and (false-if-exception WantChords) (false-if-exception ChordRhythms))
 #{
-  \new Voice = "Rhythm" { \ChordRhythms }
-#})
-
-% Melody
-  \new Voice = "Melody"
-    { \transpose \scoreRoot \rootChoice \Melody
-      \label "lastPgNo" % "-/N" page number trick
-    }
-
-% Lyrics
-#(if WantLyrics
-#{
-  \new Lyrics \lyricsto "Melody" { \LyricsChoice }
-#})
-
->>
-
-#(if (and WantChords ChordRhythms)
-  ; This context might not exist, in which case don't create it with \context.
-#{
-  \context Voice = "Rhythm" {
-
-    \override NoteHead.style = #'slash
+  \new Voice = "Rhythm" \with
+  { \override NoteHead.style = #'slash
     \override NoteHead.font-size = #-3
     \override NoteHead.no-ledgers = ##t
     \override Stem.details.lengths = #'(3.3)
     \override Stem.details.beam-lengths = #'(3.3)
+   }
+   { \ChordRhythms }
+#}
+)
 
-  }
+    \key bf \major
+      \new Voice = "Melody" { \Melody }
+#(if (false-if-exception WantLyrics)
+#{
+      \new Lyrics \lyricsto "Melody" { \LyricsChoice \label "lastPgNo" }
+#}
+)
+  >>
 #})
 
 >>
@@ -152,13 +211,18 @@
 
   % Adjust rehearsal mark position
   \override Score.RehearsalMark.self-alignment-X = #0.8
-  %\override Score.RehearsalMark.padding = #0.1
-  %\override Score.RehearsalMark.Y-offset = #-3
 
-  % Set lyrics font size
-  \override LyricText.font-size = \lyricsSize
+  indent = 0
+  ragged-right = ##f
+  ragged-last = ##f
 
   \context { \Score
+
+    % For a chord-only score, make all bars line up by using proportional notation.
+    \setNoteProportions
+
+    % Set lyrics font size
+    \override LyricText.font-size = \lyricsSize
 
     % Hide bar numbers
     \remove "Bar_number_engraver"
@@ -171,8 +235,8 @@
     \override Clef.break-visibility = #'#(#f #f #f)
     \override KeySignature.break-visibility = #'#(#f #f #f)
 
-    % Move lyrics a bit closer to staff
-    \override VerticalAxisGroup.nonstaff-relatedstaff-spacing.padding = #0.8
+    % Don't allow automatic line breaks
+    \override NonMusicalPaperColumn.line-break-permission = ##f
 
     % Winged repeat signs
     startRepeatBarType = "[|:"
@@ -187,3 +251,6 @@
        )
   }
 }}
+
+\defineBarLine "|" #'("|" "|" "|")
+\defineBarLine "||" #'("||" "||" "||")

@@ -181,6 +181,7 @@ JazzChordsList = {
   <c f g bes>-\markup { \csub #"7sus4" } % :sus4.7
   <c f g bes d'>-\markup { \csub #"9sus4" } % :sus4.7.9
   <c f g a>-\markup { \csub #"6sus" } % :sus4.6
+  <c d g a>-\markup { \csub #"6sus9" } % :sus2.6
   <c f g bes a'>-\markup { \csub #"13sus" } % :sus4.7.13
   <c f g a'>-\markup { \csub #"13sus" } % :sus13
   <c f g bes des'>-\markup { \csub #"7sus4♯9" } % :sus4.7.9-
@@ -241,3 +242,44 @@ JazzChords = #(append (sequential-music-to-chord-exceptions JazzChordsList #t) i
 
   }
 }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Associate chord diagrams with the first occurrence of each
+% chord symbol.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+forceDiagram = #(define-music-function (music) (ly:music?)
+   (ly:music-set-property! music 'force-diagram #t)
+   music)
+
+autoTagChords = #(define-music-function (music) (ly:music?)
+  (let ((seen-chords (make-hash-table 100)))
+    (music-map
+      (lambda (m)
+        (if (music-is-of-type? m 'event-chord)
+            (let* ((elts (ly:music-property m 'elements))
+                   ;; Extract pitches to form a unique signature for the chord
+                   ;; We ignore duration so bf1 and bf2 count as the same chord
+                   (pitches (filter-map
+                              (lambda (e) (ly:music-property e 'pitch))
+                              elts)))
+
+              (if (and (hash-ref seen-chords pitches)
+                       (not (eq? #t (ly:music-property m 'force-diagram))))
+                  ;; CASE: chord seen before and no override to force the diagram to be shown.
+                  ;; In 'score': show chord. In 'diagram': show spacer (preserves form).
+                  #{
+                     \tag #'score { #m }
+                     \tag #'diagram { #(skip-of-length m) }
+                  #}
+
+                  ;; CASE: new chord. Mark as seen and show in both.
+                  (begin
+                    (hash-set! seen-chords pitches #t)
+                    #{ \tag #'diagram \tag #'score { #m } #}
+                  )))
+            ;; Return non-chord events untouched.
+            m))
+      music)))
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

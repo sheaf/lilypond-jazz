@@ -18,16 +18,16 @@ Form = {
 \numericTimeSignature\time 4/4
 
 \mark \markup { \bold \rounded-box { "Intro" } }
-\repeat unfold 2 { s1*4 \break }
+\repeat unfold 2 { s1*4 \break } \bar "||"
 
 \mark \markup { \bold \rounded-box { "A1" } } \section
-\repeat unfold 2 { s1*4 \break }
+\repeat unfold 2 { s1*4 \break } \bar "||"
 
 \mark \markup { \bold \rounded-box { "B" } } \section
-\repeat unfold 2 { s1*4 \break }
+\repeat unfold 2 { s1*4 \break } \bar "||"
 
 \mark \markup { \bold \rounded-box { "A2" } } \section
-\repeat unfold 2 { s1*4 \break }
+\repeat unfold 2 { s1*4 \break } \bar "||"
 
 \mark \markup { \rounded-box { \bold "C" } } \section
 s1*4 \break
@@ -56,7 +56,7 @@ Chords = \chordmode {
   | d2:m11    d2:7.9- | g2:m7  df2:13.11+ | c2:m7 \rl c2:m7/bf | a2:m7.11.5- d2:7.9-.13- |
 
   %C
-  | g1:m7          | gf1:7                             | bf2:maj13 ef2:maj13 | d2:m7.5-      g2:7       |
+  | g1:m7          | gf1:7                             | bf2:maj13 ef2:maj13 | d2:m7.5-      g2:7      |
   | c2:m7 g2:7.13- | c4:9 c4:9.13- f4:sus13 f4:7.9-.9+ | bf2:6.9   g2:m9     | gf2:maj7.11+ f2:7.9-.9+ |
 
   % Coda
@@ -161,10 +161,10 @@ c4 d4 f4 d4 |
 c1
 }
 
-
-#(define WantChords #t)
-#(define WantLyrics #t)
+WantMelody = ##t
+WantChords = ##t
+WantLyrics = ##t
 LyricsChoice = \Lyrics_English
-#(define ChordRhythms #f)
+ChordRhythms = ##f
 
 \include "lead-sheet.ily"

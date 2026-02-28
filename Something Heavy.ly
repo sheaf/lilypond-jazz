@@ -15,6 +15,7 @@ staffSize = 20.0
 lyricsSize = -1.0
 WantLyrics = ##t
 WantChords = ##t
+WantMelody = ##t
 
 Form = {
 
